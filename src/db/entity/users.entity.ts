@@ -1,25 +1,32 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity()
 export class UserEntities {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'bigint', unique: true })
-  userId: number;
-
   @Column()
-  ticker: string;
+  address: string;
 
-  @Column({ type: 'varchar', length: '15' })
-  chain: string;
+  @Column({ type: 'varchar', nullable: true })
+  fotoUrl: string;
 
-  @Column({ type: 'int8' })
-  chainId: number;
+  @Column({ type: 'varchar', nullable: true })
+  bannerUrl: string;
 
-  @Column()
-  tokenContractAddress: string;
+  @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  created_at: Date;
 
-  @Column({ type: 'bigint' })
-  currentBlock: number;
+  @UpdateDateColumn({
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+    onUpdate: 'CURRENT_TIMESTAMP',
+  })
+  updated_at: Date;
 }

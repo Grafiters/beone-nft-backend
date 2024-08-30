@@ -24,7 +24,10 @@
       "@controllers/*": ["src/controllers/*"],
       "@utils/*": ["src/utils/*"],
       "@db/*": ["src/db/*"],
-      "@abi/*": ["src/abi/*"]
+      "@abi/*": ["src/abi/*"],
+      "@swagger/*": ["src/swagger/*"],
+      "@params/*": ["src/params/*"],
+      "@tools/*": ["src/tools/*"]
     },
   }
 }

@@ -8,6 +8,9 @@ import { UserEntities } from '@db/entity/users.entity';
 import { UserService } from './db/models/user/user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { SwaggerConfigModule } from './swagger/swagger.module';
+import { AuthController } from './controllers/auth/auth.controller';
+import { AuthService } from './services/auth/auth.service';
 import databaseConfig from '@configs/database.config';
 
 export const entities = [UserEntities];
@@ -34,8 +37,9 @@ export const entities = [UserEntities];
       isGlobal: true,
       load: [databaseConfig],
     }),
+    SwaggerConfigModule,
   ],
-  controllers: [AppController, PublicController],
-  providers: [AppService, UserService],
+  controllers: [AppController, PublicController, AuthController],
+  providers: [AppService, UserService, AuthService],
 })
 export class AppModule {}

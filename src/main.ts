@@ -5,6 +5,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import { SwaggerConfigModule } from '@swagger/swagger.module';
 
 async function bootstrap() {
   const fastifyAdapter = new FastifyAdapter({
@@ -18,6 +19,9 @@ async function bootstrap() {
     fastifyAdapter,
     { rawBody: true },
   );
+
+  SwaggerConfigModule.setupSwagger(app);
+
   await app.listen(3000, '0.0.0.0');
 }
 bootstrap();
