@@ -1,11 +1,14 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import logger from './pino-logger';
+import cookieParser from 'cookie-parser';
+
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { SwaggerConfigModule } from '@swagger/swagger.module';
+import fastifyCookie from '@fastify/cookie';
 
 async function bootstrap() {
   const fastifyAdapter = new FastifyAdapter({
@@ -20,8 +23,18 @@ async function bootstrap() {
     { rawBody: true },
   );
 
-  SwaggerConfigModule.setupSwagger(app);
+  const jwtPrivateKey = Buffer.from(
+    process.env.JWT_PRIVATE_KEY,
+    'base64',
+  ).toString('utf-8');
 
+  app.register(fastifyCookie, {
+    secret: jwtPrivateKey,
+  });
+
+  app.use(cookieParser());
+
+  SwaggerConfigModule.setupSwagger(app);
   await app.listen(3000, '0.0.0.0');
 }
 bootstrap();

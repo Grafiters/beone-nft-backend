@@ -12,6 +12,12 @@ import { SwaggerConfigModule } from './swagger/swagger.module';
 import { AuthController } from './controllers/auth/auth.controller';
 import { AuthService } from './services/auth/auth.service';
 import databaseConfig from '@configs/database.config';
+import { rpcConfig } from '@configs/rpc.config';
+import { JwtServices } from './services/jwt/jwt.service';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtStrategy } from '@services/jwt/jwt.strategy';
+import { UsersController } from './controllers/users/users.controller';
 
 export const entities = [UserEntities];
 @Module({
@@ -35,11 +41,24 @@ export const entities = [UserEntities];
     TypeOrmModule.forFeature([UserEntities]),
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [databaseConfig],
+      load: [databaseConfig, rpcConfig],
+    }),
+    PassportModule,
+    JwtModule.register({
+      publicKey: process.env.JWT_PUBLIC_KEY,
+      privateKey: process.env.JWT_PRIVATE_KEY,
+      signOptions: {
+        expiresIn: '2h',
+      },
     }),
     SwaggerConfigModule,
   ],
-  controllers: [AppController, PublicController, AuthController],
-  providers: [AppService, UserService, AuthService],
+  controllers: [
+    AppController,
+    PublicController,
+    AuthController,
+    UsersController,
+  ],
+  providers: [AppService, UserService, AuthService, JwtServices, JwtStrategy],
 })
 export class AppModule {}
