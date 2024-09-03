@@ -17,12 +17,15 @@ ifeq ($(NAME),)
 	@echo "Error: You must specify the NAME of the migration"
 	@echo "Usage: make generate-migration NAME=\"migration-name\""
 else
-	$(TYPEORM_CMD) migration:generate $(TYPEORM_CONFIG) -n $(NAME)
+	pnpm typeorm migration:create src/db/migrations/$(NAME)
 endif
 
 # Run all pending migrations
 run-migrations:
 	$(TYPEORM_CMD) migration:run $(TYPEORM_CONFIG)
+
+run-rollbacks:
+	$(TYPEORM_CMD) migration:revert $(TYPEORM_CONFIG)
 
 # Clean up generated files (optional)
 clean:

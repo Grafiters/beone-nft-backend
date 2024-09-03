@@ -18,8 +18,9 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from '@services/jwt/jwt.strategy';
 import { UsersController } from './controllers/users/users.controller';
+import { StakedContractEntities } from '@db/entity/staked_contract.entity';
 
-export const entities = [UserEntities];
+export const entities = [UserEntities, StakedContractEntities];
 @Module({
   imports: [
     DatabaseModule,

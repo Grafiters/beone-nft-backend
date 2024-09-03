@@ -6,7 +6,7 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@services/auth/auth.guard';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
@@ -16,6 +16,7 @@ export class UsersController {
   private readonly logger = new Logger(UsersController.name);
 
   @Get('profile')
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'user get profile' })
   async profile(

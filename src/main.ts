@@ -1,7 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import logger from './pino-logger';
-import cookieParser from 'cookie-parser';
 
 import {
   FastifyAdapter,
@@ -31,8 +30,6 @@ async function bootstrap() {
   app.register(fastifyCookie, {
     secret: jwtPrivateKey,
   });
-
-  app.use(cookieParser());
 
   SwaggerConfigModule.setupSwagger(app);
   await app.listen(3000, '0.0.0.0');

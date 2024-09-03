@@ -37,15 +37,9 @@ export class AuthController {
           uid: '12345678',
         });
 
-        res.setCookie('_nft_session', access_token.access_token, {
-          secure: process.env.NODE_ENV === 'production',
-          maxAge: 24 * 60 * 60 * 1000,
-          sameSite: 'strict',
-        });
-
         return res.send({
           status: 200,
-          message: 'auth.session_created',
+          message: access_token.access_token,
         });
       }
     } catch (error) {

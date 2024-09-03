@@ -12,7 +12,10 @@ export class UserEntities {
   id: number;
 
   @Column()
-  address: string;
+  name: string;
+
+  @Column()
+  value: string;
 
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
