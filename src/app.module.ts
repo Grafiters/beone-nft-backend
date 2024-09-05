@@ -22,6 +22,8 @@ import { StakedContractEntities } from '@db/entity/staked_contract.entity';
 import { ContractController } from './controllers/contract/contract.controller';
 import { ConfigEntities } from '@db/entity/configs.entity';
 import { ConfigServices } from './db/models/config/config.service';
+import { StakedService } from './db/models/staked/staked.service';
+import { BlockchainService } from './services/blockchain/blockchain.service';
 
 export const entities = [UserEntities, StakedContractEntities, ConfigEntities];
 @Module({
@@ -71,6 +73,8 @@ export const entities = [UserEntities, StakedContractEntities, ConfigEntities];
     JwtServices,
     JwtStrategy,
     ConfigServices,
+    StakedService,
+    BlockchainService,
   ],
 })
 export class AppModule {}

@@ -11,6 +11,9 @@ export class StakedContractEntities {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column()
+  user_id: number;
+
   @Column({ nullable: false, unique: true })
   contract_address: string;
 

@@ -1,3 +1,4 @@
+import { UserService } from '@db/models/user/user.service';
 import {
   CanActivate,
   ExecutionContext,
@@ -9,7 +10,10 @@ import { FastifyRequest } from 'fastify';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private readonly jwtService: JwtServices) {}
+  constructor(
+    private readonly jwtService: JwtServices,
+    private readonly userService: UserService,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<FastifyRequest>();
@@ -21,7 +25,12 @@ export class AuthGuard implements CanActivate {
 
     try {
       const decode = await this.jwtService.verifySession(token);
-      request.headers['users'] = decode.sub;
+      const user = await this.userService.findUserByAddress(decode.sub);
+      if (user) {
+        request.headers['users'] = JSON.stringify(user);
+      } else {
+        request.headers['users'] = undefined;
+      }
       return true;
     } catch (error) {
       throw new UnauthorizedException('Invalid token');

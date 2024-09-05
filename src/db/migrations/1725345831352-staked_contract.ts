@@ -14,6 +14,11 @@ export class StackedContract1725345831352 implements MigrationInterface {
             generationStrategy: 'increment',
           },
           {
+            name: 'user_id',
+            type: 'int',
+            isNullable: false,
+          },
+          {
             name: 'contract_address',
             type: 'varchar',
             isUnique: true,
