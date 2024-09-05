@@ -21,13 +21,13 @@ export class Users1724984885317 implements MigrationInterface {
             length: '150',
           },
           {
-            name: 'fotoUrl',
+            name: 'provider',
             type: 'varchar',
             zerofill: true,
           },
           {
-            name: 'bannerUrl',
-            type: 'varchar',
+            name: 'chain_id',
+            type: 'int',
             zerofill: true,
           },
           {
@@ -39,6 +39,7 @@ export class Users1724984885317 implements MigrationInterface {
             name: 'updated_at',
             type: 'timestamp',
             default: 'now()',
+            onUpdate: 'now()',
           },
         ],
       }),

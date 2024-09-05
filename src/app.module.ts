@@ -19,8 +19,11 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from '@services/jwt/jwt.strategy';
 import { UsersController } from './controllers/users/users.controller';
 import { StakedContractEntities } from '@db/entity/staked_contract.entity';
+import { ContractController } from './controllers/contract/contract.controller';
+import { ConfigEntities } from '@db/entity/configs.entity';
+import { ConfigServices } from './db/models/config/config.service';
 
-export const entities = [UserEntities, StakedContractEntities];
+export const entities = [UserEntities, StakedContractEntities, ConfigEntities];
 @Module({
   imports: [
     DatabaseModule,
@@ -34,12 +37,12 @@ export const entities = [UserEntities, StakedContractEntities];
         username: configService.get('database').username,
         password: configService.get('database').password,
         database: configService.get('database').database,
-        entities: configService.get('database').entities,
+        entities: entities,
         synchronize: true,
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([UserEntities]),
+    TypeOrmModule.forFeature(entities),
     ConfigModule.forRoot({
       isGlobal: true,
       load: [databaseConfig, rpcConfig],
@@ -59,7 +62,15 @@ export const entities = [UserEntities, StakedContractEntities];
     PublicController,
     AuthController,
     UsersController,
+    ContractController,
   ],
-  providers: [AppService, UserService, AuthService, JwtServices, JwtStrategy],
+  providers: [
+    AppService,
+    UserService,
+    AuthService,
+    JwtServices,
+    JwtStrategy,
+    ConfigServices,
+  ],
 })
 export class AppModule {}

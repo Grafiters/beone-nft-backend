@@ -10,6 +10,7 @@ help:
 	@echo "Usage:"
 	@echo "  make generate-migration NAME=\"migration-name\"  Generate a new migration"
 	@echo "  make run-migrations                          Run all pending migrations"
+	@echo "  make run-rollbacks                           Run rollbacks latst migrations"
 
 # Generate a new migration
 generate-migration:

@@ -11,4 +11,32 @@ export class UserService {
     @InjectRepository(UserEntities)
     private readonly userRepository: UserEntitiesRepository,
   ) {}
+
+  async createOrUpdateUser(
+    address: string,
+    provider: string,
+    chainId: number,
+  ): Promise<UserEntities> {
+    this.logger.debug(`update user data ${address}`);
+    let user = await this.findUserByAddress(address);
+    if (user) {
+      user = this.userRepository.merge(user, {
+        address: address,
+        provider: provider,
+        chainId: chainId,
+      });
+    } else {
+      user = this.userRepository.create({
+        address: address,
+        provider: provider,
+        chainId: chainId,
+      });
+    }
+    return await this.userRepository.save(user);
+  }
+
+  async findUserByAddress(address: string): Promise<UserEntities | null> {
+    this.logger.debug(`find user by ${address}`);
+    return await this.userRepository.findOne({ where: { address: address } });
+  }
 }

@@ -5,6 +5,7 @@ import { AuthSessionRequest } from '@params/request/auth-session-body-request.dt
 import { GeneralResponse } from '@params/response/general-response.dto';
 import { JwtServices } from '../../services/jwt/jwt.service';
 import { FastifyReply } from 'fastify';
+import { UserService } from '@db/models/user/user.service';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -12,6 +13,7 @@ export class AuthController {
   private readonly logger = new Logger(AuthController.name);
   constructor(
     private readonly authService: AuthService,
+    private readonly userService: UserService,
     private jwtServices: JwtServices,
   ) {}
 
@@ -24,7 +26,7 @@ export class AuthController {
     @Body() body: AuthSessionRequest,
     @Res() res: FastifyReply,
   ): Promise<void> {
-    const { address, message, signature } = body;
+    const { address, message, signature, provider, chainId } = body;
     try {
       const isValid = await this.authService.verifySignature(
         address,
@@ -33,13 +35,24 @@ export class AuthController {
       );
 
       if (isValid) {
+        const user = await this.userService.createOrUpdateUser(
+          address,
+          provider,
+          chainId,
+        );
+
         const access_token = await this.jwtServices.sessionCreate({
-          uid: '12345678',
+          address: user.address,
         });
 
         return res.send({
           status: 200,
           message: access_token.access_token,
+        });
+      } else {
+        return res.status(422).send({
+          status: 422,
+          message: 'auth.signature_invalid_signer_or_message',
         });
       }
     } catch (error) {

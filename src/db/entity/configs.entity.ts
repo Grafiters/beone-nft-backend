@@ -1,29 +1,13 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
-export class UserEntities {
+@Entity('configs')
+export class ConfigEntities {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ name: 'name' })
   name: string;
 
-  @Column()
+  @Column({ name: 'value' })
   value: string;
-
-  @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
-  created_at: Date;
-
-  @UpdateDateColumn({
-    type: 'timestamptz',
-    default: () => 'CURRENT_TIMESTAMP',
-    onUpdate: 'CURRENT_TIMESTAMP',
-  })
-  updated_at: Date;
 }

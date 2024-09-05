@@ -4,7 +4,7 @@ export class StackedContract1725345831352 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'stacked_contracts',
+        name: 'staked_contracts',
         columns: [
           {
             name: 'id',
@@ -76,6 +76,6 @@ export class StackedContract1725345831352 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('stacked_contract');
+    await queryRunner.dropTable('staked_contracts');
   }
 }

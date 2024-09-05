@@ -14,7 +14,7 @@ export class JwtServices {
     ).toString('utf-8');
     const jti = await this.generateSecureRandom();
     const payload = {
-      sub: user.uid,
+      sub: user.address,
       iss: 'beonenft',
       aud: ['beonenft'],
       jti: jti,

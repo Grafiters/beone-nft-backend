@@ -41,6 +41,9 @@ dependencies:
   '@swc/cli':
     specifier: ^0.4.0
     version: 0.4.0(@swc/core@1.7.21)
+  '@types/js-yaml':
+    specifier: ^4.0.9
+    version: 4.0.9
   class-transformer:
     specifier: ^0.5.1
     version: 0.5.1
@@ -62,6 +65,9 @@ dependencies:
   fastify:
     specifier: ^4.28.1
     version: 4.28.1
+  js-yaml:
+    specifier: ^4.1.0
+    version: 4.1.0
   passport:
     specifier: ^0.7.0
     version: 0.7.0
@@ -1667,6 +1673,10 @@ packages:
       expect: 29.7.0
       pretty-format: 29.7.0
     dev: true
+
+  /@types/js-yaml@4.0.9:
+    resolution: {integrity: sha512-k4MGaQl5TGo/iipqb2UDG2UwjXziSWkh0uysQelTlJpX1qGlpUZYm8PnO4DxG1qBomtJUdYJ6qR6xdIah10JLg==}
+    dev: false
 
   /@types/json-schema@7.0.15:
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}

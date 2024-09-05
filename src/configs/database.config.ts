@@ -4,7 +4,7 @@ import { env } from 'node:process';
 import * as glob from 'glob';
 
 const entities = glob
-  .sync(__dirname + '@db/entities/*.entity.ts')
+  .sync(__dirname + '../db/entity/*.entity.ts')
   .map((file) => require(file).default);
 
 export default registerAs('database', () => ({

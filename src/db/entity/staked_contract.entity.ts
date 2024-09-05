@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity('staked_contracts')
 export class StakedContractEntities {
   @PrimaryGeneratedColumn()
   id: number;
