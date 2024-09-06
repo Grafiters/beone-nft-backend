@@ -19,6 +19,11 @@ export class StackedContract1725345831352 implements MigrationInterface {
             isNullable: false,
           },
           {
+            name: 'payment_detail_id',
+            type: 'int',
+            isNullable: false,
+          },
+          {
             name: 'contract_address',
             type: 'varchar',
             isUnique: true,
@@ -62,8 +67,7 @@ export class StackedContract1725345831352 implements MigrationInterface {
           },
           {
             name: 'status',
-            type: 'int',
-            default: 0,
+            type: 'varchar',
           },
           {
             name: 'created_at',

@@ -8,8 +8,14 @@ import { ConfigEntitiesRepository } from '@db/models/config/config.repository';
 import { ConfigEntities } from '@db/entity/configs.entity';
 import { ConfigServices } from '@db/models/config/config.service';
 import { StakedContractEntities } from '@db/entity/staked_contract.entity';
+import { PaymentDetailsEntities } from '@db/entity/payment_details';
 
-export const entities = [UserEntities, StakedContractEntities, ConfigEntities];
+export const entities = [
+  UserEntities,
+  StakedContractEntities,
+  ConfigEntities,
+  PaymentDetailsEntities,
+];
 @Module({
   imports: [
     UserEntitiesRepository,

@@ -14,6 +14,9 @@ export class StakedContractEntities {
   @Column()
   user_id: number;
 
+  @Column({ type: 'int', nullable: false })
+  payment_detail_id: number;
+
   @Column({ nullable: false, unique: true })
   contract_address: string;
 
@@ -38,7 +41,7 @@ export class StakedContractEntities {
   @Column({ nullable: true, default: 0 })
   bonus_end_block: number;
 
-  @Column({ nullable: true, default: 'pending' })
+  @Column({ default: 'pending' })
   status: string;
 
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })

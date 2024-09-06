@@ -3,11 +3,9 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserService } from '../user/user.service';
-import {
-  PaymentDtoParams,
-  StakedContractInitialize,
-} from '@params/function/staked-contract';
+import { StakedContractInitialize } from '@params/function/staked-contract';
 import { applyDynamicFilters } from '@tools/query-builder';
+import { BlockchainService } from '@services/blockchain/blockchain.service';
 
 @Injectable()
 export class StakedService {
@@ -16,16 +14,23 @@ export class StakedService {
   constructor(
     @InjectRepository(StakedContractEntities)
     private readonly stakedRepository: Repository<StakedContractEntities>,
+    private readonly blockchainService: BlockchainService,
     private readonly userService: UserService,
   ) {}
 
-  async fetchAll(filters: {
-    [key: string]: any;
-  }): Promise<StakedContractEntities[] | []> {
+  async fetchAll(
+    filters:
+      | {
+          [key: string]: any;
+        }
+      | '',
+  ): Promise<StakedContractEntities[] | []> {
     const staked_data =
       this.stakedRepository.createQueryBuilder('staked_contracts');
 
-    applyDynamicFilters(staked_data, filters, 'staked_contracts');
+    if (filters != '') {
+      applyDynamicFilters(staked_data, filters, 'staked_contracts');
+    }
 
     const staked = await staked_data.getMany();
     return staked.length > 0 ? staked : [];
@@ -47,37 +52,55 @@ export class StakedService {
     return staked.length > 0 ? staked : [];
   }
 
-  async payment(
-    paymentDto: PaymentDtoParams,
+  async initialize_contract(
+    contract: StakedContractInitialize,
   ): Promise<StakedContractEntities | undefined> {
-    const params = {
-      user_id: paymentDto.user_id,
-      contract_address: paymentDto.hash,
-    };
+    let data: StakedContractEntities = await this.fetchByUserAndContract(
+      contract.user_id,
+      contract.contract_address,
+    );
 
-    const create = this.stakedRepository.create(params);
     try {
-      const save = await this.stakedRepository.save(create);
-      return save;
+      if (data) {
+        data = this.stakedRepository.merge(data, {
+          name: contract.name,
+          symbol: contract.symbol,
+          staked_token: contract.staked_token,
+          reward_token: contract.reward_token,
+          reward_per_block: contract.reward_per_block,
+          start_block: contract.start_block,
+          bonus_end_block: contract.bonus_end_block,
+          status: contract.status,
+        });
+
+        return await this.stakedRepository.save(data);
+      } else {
+        return undefined;
+      }
     } catch (error) {
-      this.logger.error(`payment error => ${error}`);
+      this.logger.error(`errored update initialize staked =>> ${error}`);
       return undefined;
     }
   }
 
-  async staked_contract(
+  async init_staked_contract(
     contract: StakedContractInitialize,
   ): Promise<StakedContractEntities | string> {
-    let data = await this.fetchByUserAndContract(
+    const data = await this.fetchByUserAndContract(
       contract.user_id,
       contract.contract_address,
     );
 
     if (data) {
-      data = this.stakedRepository.merge(data, contract);
-      return await this.stakedRepository.save(data);
-    } else {
-      return 'staked.contract_doesnt_exists';
+      return 'staked.already_exists';
+    }
+
+    try {
+      const create = this.stakedRepository.create(contract);
+      return await this.stakedRepository.save(create);
+    } catch (error) {
+      this.logger.error(`errored when init staked to database => ${error}`);
+      return 'staked.cannot_create_staked';
     }
   }
 

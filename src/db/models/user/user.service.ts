@@ -35,6 +35,11 @@ export class UserService {
     return await this.userRepository.save(user);
   }
 
+  async findUserByID(id: number): Promise<UserEntities | null> {
+    this.logger.debug(`find user by id ${id}`);
+    return await this.userRepository.findOne({ where: { id: id } });
+  }
+
   async findUserByAddress(address: string): Promise<UserEntities | null> {
     this.logger.debug(`find user by ${address}`);
     return await this.userRepository.findOne({ where: { address: address } });

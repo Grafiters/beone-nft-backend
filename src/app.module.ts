@@ -24,8 +24,15 @@ import { ConfigEntities } from '@db/entity/configs.entity';
 import { ConfigServices } from './db/models/config/config.service';
 import { StakedService } from './db/models/staked/staked.service';
 import { BlockchainService } from './services/blockchain/blockchain.service';
+import { PaymentDetailsEntities } from '@db/entity/payment_details';
+import { PaymentsService } from './db/models/payments/payments.service';
 
-export const entities = [UserEntities, StakedContractEntities, ConfigEntities];
+export const entities = [
+  UserEntities,
+  StakedContractEntities,
+  ConfigEntities,
+  PaymentDetailsEntities,
+];
 @Module({
   imports: [
     DatabaseModule,
@@ -75,6 +82,7 @@ export const entities = [UserEntities, StakedContractEntities, ConfigEntities];
     ConfigServices,
     StakedService,
     BlockchainService,
+    PaymentsService,
   ],
 })
 export class AppModule {}

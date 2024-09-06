@@ -9,3 +9,5 @@ configs:
     value: 0.01
   - name: range_block_change
     value: 3
+  - name: amount_payment
+    value: 1000
