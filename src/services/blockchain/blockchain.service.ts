@@ -8,32 +8,47 @@ import {
 } from '@params/function/blockchain-params';
 import Web3 from 'web3';
 import InputDataDecoder from 'ethereum-input-data-decoder';
-import BigNumber from 'bignumber.js';
 import Decimal from 'decimal.js';
+import { rpcConfig, RpcConfig } from '@configs/rpc.config';
+import { ConfigService } from '@nestjs/config';
+import { ContractsService } from '@services/contracts/contracts.service';
 
 @Injectable()
 export class BlockchainService {
   private readonly logger = new Logger(BlockchainService.name);
   private base_factor: Decimal = new Decimal(Math.pow(10, 18));
+  private readonly rpcConfig: RpcConfig;
   private web3: Web3;
 
   private readonly abiJsonFile: string = path.join(
     __dirname,
-    '../../cra-abi.json',
+    '../../../cra-abi.json',
   );
 
-  constructor(private readonly configServices: ConfigServices) {}
+  constructor(
+    private readonly configServices: ConfigServices,
+    private readonly contractServices: ContractsService,
+    private configService: ConfigService,
+  ) {
+    this.rpcConfig = rpcConfig();
+  }
+
+  async getCurrentBlock(): Promise<number> {
+    await this.web3Init(this.rpcConfig.rpcUrl);
+    return await this.web3.eth.getBlockNumber();
+  }
 
   async fetchTransactionPayment(
     tf: FetchPaymentTransaction,
   ): Promise<TransactionData | null> {
     this.logger.debug(`start to create staked contract address ${tf.hash}`);
-    await this.web3Init(tf.provider);
+    await this.web3Init(this.rpcConfig.rpcUrl);
 
     let data: TransactionData;
     const transaction = await this.web3.eth.getTransaction(tf.hash);
     if (transaction) {
-      const decoder = new InputDataDecoder(this.abiJsonFile);
+      const abi = this.loadAbiJson();
+      const decoder = new InputDataDecoder(abi.cra);
       const result = decoder.decodeData(transaction.input);
       const toaddress = '0x' + result.inputs[0];
       const receipt = await this.web3.eth.getTransactionReceipt(tf.hash);
@@ -62,15 +77,23 @@ export class BlockchainService {
   }
 
   async deploySmartContract(): Promise<string> {
-    return 'data';
+    this.logger.debug(`start deploy smart contract`);
+    try {
+      const deploy = await this.contractServices.deploy();
+      this.logger.debug(`done deploy smart contract with address ${deploy}`);
+      return deploy;
+    } catch (error) {
+      this.logger.error(`deploy smart contract errored cause ${error}`);
+      return error;
+    }
   }
 
   async web3Init(provider: string) {
     this.web3 = new Web3(new Web3.providers.HttpProvider(provider));
   }
 
-  convert_from_base(amount: BigNumber): Decimal {
-    return new Decimal(amount.toFixed()).div(this.base_factor);
+  convert_from_base(amount: Decimal): Decimal {
+    return new Decimal(amount).div(this.base_factor);
   }
 
   async configurationData(params: string): Promise<string | null> {
@@ -80,6 +103,10 @@ export class BlockchainService {
     } else {
       return null;
     }
+  }
+
+  getRpcDetails(): RpcConfig {
+    return this.rpcConfig;
   }
 
   loadAbiJson(): any {

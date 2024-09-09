@@ -7,13 +7,17 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { ConfigResponse } from '@params/response/config-response.dto';
+import { BlockchainService } from '@services/blockchain/blockchain.service';
 import { plainToInstance } from 'class-transformer';
 
 @ApiTags('public')
 @Controller('public')
 export class PublicController {
   private readonly logger = new Logger(PublicController.name);
-  constructor(private readonly configServices: ConfigServices) {}
+  constructor(
+    private readonly configServices: ConfigServices,
+    private readonly blockchainService: BlockchainService,
+  ) {}
 
   @Get()
   @ApiOperation({ summary: 'publich check healthty' })
@@ -34,5 +38,12 @@ export class PublicController {
 
     const dto = plainToInstance(ConfigResponse, configDto);
     return dto;
+  }
+
+  @Get('lastsBlock')
+  @ApiOperation({ summary: 'public get latest block number' })
+  @ApiOkResponse({ type: Number })
+  async block(): Promise<number> {
+    return await this.blockchainService.getCurrentBlock();
   }
 }

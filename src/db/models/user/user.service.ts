@@ -28,7 +28,7 @@ export class UserService {
     } else {
       user = this.userRepository.create({
         address: address,
-        provider: provider,
+        provider: '-',
         chainId: chainId,
       });
     }

@@ -1,6 +1,8 @@
 configs:
   - name: payer_address
     value: '0x1fd0E4bcF1d77361dD285612D0F17cFac35da3eD'
+  - name: payment_contract_address
+    value: '0xC3227304A0c275A73E0012E4683d174291a78Dbc'
   - name: min_diff_block_start
     value: 100
   - name: min_block_end

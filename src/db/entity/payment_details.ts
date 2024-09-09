@@ -33,17 +33,17 @@ export class PaymentDetailsEntities {
   @Column({ default: 'pending' })
   status: string;
 
-  @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   payment_pending_at: Date;
 
-  @CreateDateColumn({ type: 'timestamptz', nullable: true })
+  @CreateDateColumn({ type: 'timestamp', nullable: true })
   payment_success_at: Date;
 
-  @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
 
   @UpdateDateColumn({
-    type: 'timestamptz',
+    type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
     onUpdate: 'CURRENT_TIMESTAMP',
   })

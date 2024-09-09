@@ -1,0 +1,31 @@
+# Ignore node_modules from the host system
+node_modules
+# Ignore any local environment files (use docker-compose for env vars)
+.env
+.env.local
+.env.test
+.env.production
+
+# Ignore logs
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Ignore test files
+*.spec.ts
+*.test.ts
+coverage/
+test/
+
+# Ignore temporary files and directories
+.DS_Store
+*.log
+tmp/
+*.tmp
+.idea/
+.vscode/
+
+# Ignore Docker-related files (optional, they are not needed in the image)
+docker-compose.yml
+Dockerfile
+.dockerignore

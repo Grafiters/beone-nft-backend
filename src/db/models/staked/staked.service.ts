@@ -1,9 +1,12 @@
 import { StakedContractEntities } from '@db/entity/staked_contract.entity';
 import { Injectable, Logger } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserService } from '../user/user.service';
-import { StakedContractInitialize } from '@params/function/staked-contract';
+import {
+  StakedContractCreate,
+  StakedContractInitialize,
+} from '@params/function/staked-contract';
 import { applyDynamicFilters } from '@tools/query-builder';
 import { BlockchainService } from '@services/blockchain/blockchain.service';
 
@@ -54,7 +57,11 @@ export class StakedService {
 
   async initialize_contract(
     contract: StakedContractInitialize,
+    manager?: EntityManager,
   ): Promise<StakedContractEntities | undefined> {
+    const stakedContractRepo = manager
+      ? manager.getRepository(StakedContractEntities)
+      : this.stakedRepository;
     let data: StakedContractEntities = await this.fetchByUserAndContract(
       contract.user_id,
       contract.contract_address,
@@ -62,9 +69,7 @@ export class StakedService {
 
     try {
       if (data) {
-        data = this.stakedRepository.merge(data, {
-          name: contract.name,
-          symbol: contract.symbol,
+        data = stakedContractRepo.merge(data, {
           staked_token: contract.staked_token,
           reward_token: contract.reward_token,
           reward_per_block: contract.reward_per_block,
@@ -73,7 +78,7 @@ export class StakedService {
           status: contract.status,
         });
 
-        return await this.stakedRepository.save(data);
+        return await stakedContractRepo.save(data);
       } else {
         return undefined;
       }
@@ -84,7 +89,7 @@ export class StakedService {
   }
 
   async init_staked_contract(
-    contract: StakedContractInitialize,
+    contract: StakedContractCreate,
   ): Promise<StakedContractEntities | string> {
     const data = await this.fetchByUserAndContract(
       contract.user_id,

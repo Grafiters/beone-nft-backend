@@ -17,6 +17,9 @@ export class StakedContractEntities {
   @Column({ type: 'int', nullable: false })
   payment_detail_id: number;
 
+  @Column({ type: 'varchar', nullable: true })
+  hash_initialize: string;
+
   @Column({ nullable: false, unique: true })
   contract_address: string;
 
@@ -44,11 +47,11 @@ export class StakedContractEntities {
   @Column({ default: 'pending' })
   status: string;
 
-  @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
 
   @UpdateDateColumn({
-    type: 'timestamptz',
+    type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
     onUpdate: 'CURRENT_TIMESTAMP',
   })

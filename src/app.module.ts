@@ -26,6 +26,7 @@ import { StakedService } from './db/models/staked/staked.service';
 import { BlockchainService } from './services/blockchain/blockchain.service';
 import { PaymentDetailsEntities } from '@db/entity/payment_details';
 import { PaymentsService } from './db/models/payments/payments.service';
+import { ContractsService } from './services/contracts/contracts.service';
 
 export const entities = [
   UserEntities,
@@ -83,6 +84,7 @@ export const entities = [
     StakedService,
     BlockchainService,
     PaymentsService,
+    ContractsService,
   ],
 })
 export class AppModule {}

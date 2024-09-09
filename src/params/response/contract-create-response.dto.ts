@@ -1,10 +1,10 @@
-import { PaymentDetailsEntities } from '@db/entity/payment_details';
+import { StakedContractEntities } from '@db/entity/staked_contract.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class ContractCreateResponse {
-  static async fromContract(contract: PaymentDetailsEntities) {
+  static async fromContract(contract: StakedContractEntities) {
     const dto = new ContractCreateResponse();
-    dto.hash = contract.hash;
+    dto.hash = contract.contract_address;
 
     return dto;
   }

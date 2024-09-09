@@ -1,0 +1,11 @@
+version: '3'
+services:
+  contract-services:
+    image: staked-backend:0.0.1
+    restart: always
+    ports:
+      - 3666:3000
+    volumes:
+      - ./configs.yml:/app/configs.yml
+    env_file:
+      - .env

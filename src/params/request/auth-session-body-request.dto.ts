@@ -10,7 +10,7 @@ export class AuthSessionRequest {
   @ApiProperty({ type: String, required: true })
   signature: string;
 
-  @ApiProperty({ name: 'provider', type: String, required: true })
+  @ApiProperty({ name: 'provider', type: String, required: false })
   provider: string;
 
   @ApiProperty({ name: 'chain_id', type: Number, required: true })

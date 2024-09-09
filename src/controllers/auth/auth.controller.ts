@@ -6,6 +6,7 @@ import { GeneralResponse } from '@params/response/general-response.dto';
 import { JwtServices } from '../../services/jwt/jwt.service';
 import { FastifyReply } from 'fastify';
 import { UserService } from '@db/models/user/user.service';
+import { isValidHash } from '@tools/hash-validation';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -34,7 +35,23 @@ export class AuthController {
         signature,
       );
 
-      if (isValid) {
+      const addressValid = isValidHash(address);
+      if (!addressValid) {
+        return res.status(422).send({
+          status: 422,
+          message: 'auth.signature_must_be_have_prefix_0x_or_invalid_address',
+        });
+      }
+
+      const signatureValid = isValidHash(signature);
+      if (!signatureValid) {
+        return res.status(422).send({
+          status: 422,
+          message: 'auth.signature_must_be_have_prefix_0x_or_invalid_signature',
+        });
+      }
+
+      if (typeof isValid === 'boolean' && isValid === true) {
         const user = await this.userService.createOrUpdateUser(
           address,
           provider,
@@ -59,7 +76,7 @@ export class AuthController {
       this.logger.error(error);
       return res.status(422).send({
         status: 422,
-        message: 'auth.invalid_body_message',
+        message: error,
       });
     }
   }
