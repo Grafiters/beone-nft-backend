@@ -9,3 +9,18 @@ services:
       - ./configs.yml:/app/configs.yml
     env_file:
       - .env
+  dbpgsql:
+    image: postgres:13-alpine
+    restart: always
+    ports:
+      - "25432:5432"
+    environment:
+      POSTGRES_USER: Alone
+      POSTGRES_PASSWORD: Alone123!*
+  adminpgsql:
+    image: adminer
+    restart: always
+    depends_on: 
+      - dbpgsql
+    ports:
+      - 1234:8080
