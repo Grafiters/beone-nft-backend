@@ -48,7 +48,7 @@ export const entities = [
         password: configService.get('database').password,
         database: configService.get('database').database,
         entities: entities,
-        synchronize: true,
+        synchronize: false,
       }),
       inject: [ConfigService],
     }),
