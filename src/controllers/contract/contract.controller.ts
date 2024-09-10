@@ -115,7 +115,7 @@ export class ContractController {
           provider: user.provider,
         });
 
-      if (tx_blockchain == null) {
+      if (tx_blockchain === null) {
         throw new HttpException(
           {
             status: 422,

@@ -52,6 +52,10 @@ export class BlockchainService {
       const result = decoder.decodeData(transaction.input);
       const toaddress = '0x' + result.inputs[0];
       const receipt = await this.web3.eth.getTransactionReceipt(tf.hash);
+      if (!receipt) {
+        this.logger.error(`hash ${tf.hash} is doesnot have any receipt`);
+        return null;
+      }
       if (typeof result.inputs[1] !== 'string') {
         const amount = result.inputs[1].toLocaleString('fullwide', {
           useGrouping: false,
