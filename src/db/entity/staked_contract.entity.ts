@@ -29,6 +29,9 @@ export class StakedContractEntities {
   @Column({ nullable: true })
   symbol: string;
 
+  @Column({ type: 'boolean', default: false })
+  locking: boolean;
+
   @Column({ nullable: true })
   staked_token: string;
 

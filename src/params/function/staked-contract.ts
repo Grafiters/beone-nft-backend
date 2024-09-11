@@ -26,6 +26,7 @@ export class StakedContractInitialize {
   payment_detail_id: number;
   hash_initialize: string | '';
   contract_address: string;
+  locking: boolean = false;
   staked_token: string | null;
   reward_token: string | null;
   reward_per_block: string | null;

@@ -70,6 +70,7 @@ export class StakedService {
     try {
       if (data) {
         data = stakedContractRepo.merge(data, {
+          locking: contract.locking,
           staked_token: contract.staked_token,
           reward_token: contract.reward_token,
           reward_per_block: contract.reward_per_block,

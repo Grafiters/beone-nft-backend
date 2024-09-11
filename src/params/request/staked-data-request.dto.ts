@@ -10,6 +10,9 @@ export class StakedRequest {
   @ApiProperty({ type: String })
   symbol: string;
 
+  @ApiProperty({ type: Boolean })
+  locking: boolean;
+
   @ApiProperty({ type: String, required: true })
   staked_token: string;
 

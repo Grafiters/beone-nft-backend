@@ -96,6 +96,11 @@ export class ContractsService {
         wallet,
       );
 
+      let lockStakeToken = contracts.start_block;
+      if (lockStakeToken) {
+        lockStakeToken = contracts.bonus_end_block;
+      }
+
       const tx = await contract.initialize(
         contracts.staked_token,
         contracts.reward_token,
@@ -105,6 +110,7 @@ export class ContractsService {
         0,
         0,
         wallet.address,
+        lockStakeToken,
         {
           gasPrice: ethers.parseUnits('50', 'gwei'),
         },

@@ -33,9 +33,9 @@ async function bootstrap() {
   });
 
   app.register(fastifyCors, {
-    origin: '*', // Allows all origins
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods if needed
-    credentials: false, // Allow credentials like cookies
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: false,
   });
 
   SwaggerConfigModule.setupSwagger(app);
