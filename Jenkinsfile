@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'contract-beone'
+        IMAGE_NAME = 'contract-craswap'
         DOCKERFILE = 'Dockerfile'
-        CONTAINER_NAMES = 'beone-contract-1'
+        CONTAINER_NAMES = 'craswap-contract-1'
         CONTAINER_TO_RESTARTS = 'contract'
         
         // Development Environment
