@@ -40,3 +40,12 @@ export class StakedContractCreate {
   payment_detail_id: number;
   contract_address: string;
 }
+
+export class TokenStaked {
+  address: string;
+  chainId: number;
+  symbol: string;
+  name: string;
+  decimals: string;
+  projectLink: string = '';
+}

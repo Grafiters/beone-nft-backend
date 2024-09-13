@@ -1,7 +1,6 @@
 import { ConfigServices } from '@db/models/config/config.service';
 import { PaymentsService } from '@db/models/payments/payments.service';
 import { StakedService } from '@db/models/staked/staked.service';
-import { UserService } from '@db/models/user/user.service';
 import {
   Body,
   Controller,
@@ -25,12 +24,14 @@ import {
   PaymentStatus,
   StakedContractInitialize,
   StakedStatus,
+  TokenStaked,
 } from '@params/function/staked-contract';
 import { PaymentRequest } from '@params/request/payment-stack-request.dto';
 import { StakedRequest } from '@params/request/staked-data-request.dto';
 import { ContractCreateResponse } from '@params/response/contract-create-response.dto';
 import { GeneralResponse } from '@params/response/general-response.dto';
 import { StakedResponse } from '@params/response/staked-response.dto';
+import { TokenStakedResponse } from '@params/response/token-staked-response.dto';
 import { AuthGuard } from '@services/auth/auth.guard';
 import { BlockchainService } from '@services/blockchain/blockchain.service';
 import { ContractsService } from '@services/contracts/contracts.service';
@@ -44,7 +45,6 @@ import { DataSource, QueryRunner } from 'typeorm';
 export class ContractController {
   private readonly logger = new Logger(ContractController.name);
   constructor(
-    private readonly userService: UserService,
     private readonly stakedService: StakedService,
     private readonly blockchainService: BlockchainService,
     private readonly contractService: ContractsService,
@@ -58,12 +58,44 @@ export class ContractController {
   @ApiOkResponse({ type: StakedResponse })
   async staked(): Promise<StakedResponse[]> {
     const stake = await this.stakedService.fetchAll('');
+
     const stakeDto = await Promise.all(
-      stake.map((st) => StakedResponse.fromStaked(st)),
+      stake.map(async (st) => {
+        let staked_token_detail: TokenStaked | null = null;
+        if (st?.staked_token) {
+          staked_token_detail = await this.blockchainService.getTokenDetail(
+            st.staked_token,
+          );
+        }
+
+        let reward_token_detail: TokenStaked | null = null;
+        if (st?.reward_token) {
+          reward_token_detail = await this.blockchainService.getTokenDetail(
+            st.reward_token,
+          );
+        }
+
+        const stakedResponse = await StakedResponse.fromStaked(
+          st,
+          staked_token_detail
+            ? await TokenStakedResponse.fromStaked(staked_token_detail)
+            : null,
+          reward_token_detail
+            ? await TokenStakedResponse.fromStaked(reward_token_detail)
+            : null,
+        );
+
+        return stakedResponse;
+      }),
     );
 
-    const dto = plainToInstance(StakedResponse, stakeDto);
-    return dto;
+    const removeBigInt = JSON.parse(
+      JSON.stringify(stakeDto, (key, value) =>
+        typeof value === 'bigint' ? value.toString() : value,
+      ),
+    );
+
+    return removeBigInt;
   }
 
   @Get('me')
@@ -74,12 +106,44 @@ export class ContractController {
   async staked_user(@Request() req: any): Promise<StakedResponse[]> {
     const user = JSON.parse(req.headers['users']);
     const stake = await this.stakedService.fetchAll({ user_id: user.id });
+
     const stakeDto = await Promise.all(
-      stake.map((st) => StakedResponse.fromStaked(st)),
+      stake.map(async (st) => {
+        let staked_token_detail: TokenStaked | null = null;
+        if (st?.staked_token) {
+          staked_token_detail = await this.blockchainService.getTokenDetail(
+            st.staked_token,
+          );
+        }
+
+        let reward_token_detail: TokenStaked | null = null;
+        if (st?.reward_token) {
+          reward_token_detail = await this.blockchainService.getTokenDetail(
+            st.reward_token,
+          );
+        }
+
+        const stakedResponse = await StakedResponse.fromStaked(
+          st,
+          staked_token_detail
+            ? await TokenStakedResponse.fromStaked(staked_token_detail)
+            : null,
+          reward_token_detail
+            ? await TokenStakedResponse.fromStaked(reward_token_detail)
+            : null,
+        );
+
+        return stakedResponse;
+      }),
     );
 
-    const dto = plainToInstance(StakedResponse, stakeDto);
-    return dto;
+    const removeBigInt = JSON.parse(
+      JSON.stringify(stakeDto, (key, value) =>
+        typeof value === 'bigint' ? value.toString() : value,
+      ),
+    );
+
+    return removeBigInt;
   }
 
   @Post('payment')
@@ -250,6 +314,7 @@ export class ContractController {
       reward_per_block,
       start_block,
       bonus_block_end,
+      locking,
     } = body;
     const addressValid = isValidHash(contract_address);
     if (!addressValid) {
@@ -352,6 +417,7 @@ export class ContractController {
         status: StakedStatus.Success,
         user_id: 0,
         payment_detail_id: 0,
+        locking: locking,
       });
 
       if (initialize) {
@@ -366,14 +432,20 @@ export class ContractController {
           bonus_end_block: bonus_block_end,
           start_block: start_block,
           status: StakedStatus.Success,
+          locking: locking,
         };
         const create = await this.stakedService.initialize_contract(
           params,
           queryRunner.manager,
         );
         if (create) {
-          const dto = await StakedResponse.fromStaked(create);
-          const dtos = plainToInstance(StakedResponse, dto);
+          const dto = await StakedResponse.fromStaked(create, null, null);
+          const removeBigInt = JSON.parse(
+            JSON.stringify(dto, (key, value) =>
+              typeof value === 'bigint' ? value.toString() : value,
+            ),
+          );
+          const dtos = plainToInstance(StakedResponse, removeBigInt);
 
           await queryRunner.commitTransaction();
 

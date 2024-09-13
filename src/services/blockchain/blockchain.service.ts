@@ -12,6 +12,8 @@ import Decimal from 'decimal.js';
 import { rpcConfig, RpcConfig } from '@configs/rpc.config';
 import { ConfigService } from '@nestjs/config';
 import { ContractsService } from '@services/contracts/contracts.service';
+import { TokenStaked } from '@params/function/staked-contract';
+import { ethers } from 'ethers';
 
 @Injectable()
 export class BlockchainService {
@@ -36,6 +38,33 @@ export class BlockchainService {
   async getCurrentBlock(): Promise<number> {
     await this.web3Init(this.rpcConfig.rpcUrl);
     return await this.web3.eth.getBlockNumber();
+  }
+
+  async getTokenDetail(address: string): Promise<TokenStaked> {
+    const provider: ethers.JsonRpcProvider = new ethers.JsonRpcProvider(
+      this.rpcConfig.rpcUrl,
+    );
+
+    const contract = new ethers.Contract(
+      address,
+      this.loadAbiJson().cra,
+      provider,
+    );
+
+    const [name, symbol, decimals] = await Promise.all([
+      contract.name(),
+      contract.symbol(),
+      contract.decimals(),
+    ]);
+
+    return {
+      address: address,
+      chainId: this.rpcConfig.chainId,
+      name: name,
+      symbol: symbol,
+      decimals: decimals,
+      projectLink: '',
+    };
   }
 
   async fetchTransactionPayment(
