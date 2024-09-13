@@ -2,10 +2,10 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'landing-beone'
+        IMAGE_NAME = 'contract-beone'
         DOCKERFILE = 'Dockerfile'
-        CONTAINER_NAMES = 'beone-landing-1'
-        CONTAINER_TO_RESTARTS = 'landing'
+        CONTAINER_NAMES = 'beone-contract-1'
+        CONTAINER_TO_RESTARTS = 'contract'
         
         // Development Environment
         DEV_REMOTE_USER = 'royal'
