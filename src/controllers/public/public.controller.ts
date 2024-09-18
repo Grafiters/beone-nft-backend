@@ -39,11 +39,4 @@ export class PublicController {
     const dto = plainToInstance(ConfigResponse, configDto);
     return dto;
   }
-
-  @Get('lastsBlock')
-  @ApiOperation({ summary: 'public get latest block number' })
-  @ApiOkResponse({ type: Number })
-  async block(): Promise<number> {
-    return await this.blockchainService.getCurrentBlock();
-  }
 }

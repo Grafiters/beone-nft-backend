@@ -19,13 +19,10 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from '@services/jwt/jwt.strategy';
 import { UsersController } from './controllers/users/users.controller';
 import { StakedContractEntities } from '@db/entity/staked_contract.entity';
-import { ContractController } from './controllers/contract/contract.controller';
 import { ConfigEntities } from '@db/entity/configs.entity';
 import { ConfigServices } from './db/models/config/config.service';
-import { StakedService } from './db/models/staked/staked.service';
 import { BlockchainService } from './services/blockchain/blockchain.service';
 import { PaymentDetailsEntities } from '@db/entity/payment_details';
-import { PaymentsService } from './db/models/payments/payments.service';
 import { ContractsService } from './services/contracts/contracts.service';
 
 export const entities = [
@@ -72,7 +69,6 @@ export const entities = [
     PublicController,
     AuthController,
     UsersController,
-    ContractController,
   ],
   providers: [
     AppService,
@@ -81,9 +77,7 @@ export const entities = [
     JwtServices,
     JwtStrategy,
     ConfigServices,
-    StakedService,
     BlockchainService,
-    PaymentsService,
     ContractsService,
   ],
 })
