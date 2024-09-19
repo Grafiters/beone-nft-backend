@@ -18,19 +18,13 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from '@services/jwt/jwt.strategy';
 import { UsersController } from './controllers/users/users.controller';
-import { StakedContractEntities } from '@db/entity/staked_contract.entity';
 import { ConfigEntities } from '@db/entity/configs.entity';
 import { ConfigServices } from './db/models/config/config.service';
 import { BlockchainService } from './services/blockchain/blockchain.service';
-import { PaymentDetailsEntities } from '@db/entity/payment_details';
 import { ContractsService } from './services/contracts/contracts.service';
+import { ProfileEntities } from '@db/entity/profile.entity';
 
-export const entities = [
-  UserEntities,
-  StakedContractEntities,
-  ConfigEntities,
-  PaymentDetailsEntities,
-];
+export const entities = [UserEntities, ConfigEntities, ProfileEntities];
 @Module({
   imports: [
     DatabaseModule,

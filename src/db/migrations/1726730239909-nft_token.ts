@@ -1,79 +1,84 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class StackedContract1725345831352 implements MigrationInterface {
+export class NftToken1726730239909 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'staked_contracts',
+        name: 'nft_tokens',
         columns: [
           {
             name: 'id',
             type: 'int',
+            isUnique: true,
             isPrimary: true,
             isGenerated: true,
             generationStrategy: 'increment',
           },
           {
-            name: 'user_id',
+            name: 'uid',
+            type: 'varchar',
+            isUnique: true,
+            isNullable: false,
+          },
+          {
+            name: 'collection_id',
             type: 'int',
             isNullable: false,
           },
           {
-            name: 'payment_detail_id',
-            type: 'int',
-            isNullable: false,
-          },
-          {
-            name: 'contract_address',
+            name: 'hash',
             type: 'varchar',
             isUnique: true,
             isNullable: true,
-          },
-          {
-            name: 'contract_address',
-            type: 'varchar',
-            isUnique: true,
-            isNullable: false,
           },
           {
             name: 'name',
             type: 'varchar',
-            isNullable: true,
+            isUnique: false,
+            isNullable: false,
           },
           {
-            name: 'symbol',
+            name: 'external_link',
             type: 'varchar',
-            isNullable: true,
+            isUnique: false,
+            isNullable: false,
           },
           {
-            name: 'staked_token',
+            name: 'logo_url',
             type: 'varchar',
-            isNullable: true,
+            isUnique: false,
+            isNullable: false,
           },
           {
-            name: 'reward_token',
-            type: 'varchar',
-            isNullable: true,
+            name: 'description',
+            type: 'longtext',
+            isUnique: false,
+            isNullable: false,
           },
           {
-            name: 'reward_per_block',
-            type: 'varchar',
-            isNullable: true,
-            default: '0',
+            name: 'properties',
+            type: 'jsonb',
+            isUnique: false,
+            isNullable: false,
           },
           {
-            name: 'start_block',
-            type: 'int',
-            default: 0,
+            name: 'statistic',
+            type: 'jsonb',
+            isUnique: false,
+            isNullable: false,
           },
           {
-            name: 'bonus_end_block',
-            type: 'int',
-            default: 0,
+            name: 'tag',
+            type: 'jsonb',
+            isUnique: false,
+            isNullable: false,
           },
           {
-            name: 'status',
-            type: 'varchar',
+            name: 'supply',
+            type: 'number',
+            default: 1,
+            isUnique: false,
+            isNullable: false,
           },
           {
             name: 'created_at',
@@ -84,6 +89,7 @@ export class StackedContract1725345831352 implements MigrationInterface {
             name: 'updated_at',
             type: 'timestamp',
             default: 'now()',
+            onUpdate: 'now()',
           },
         ],
       }),
@@ -91,6 +97,6 @@ export class StackedContract1725345831352 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('staked_contracts');
+    await queryRunner.dropTable('nft_tokens');
   }
 }

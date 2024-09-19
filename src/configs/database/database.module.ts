@@ -7,15 +7,9 @@ import { UserEntitiesRepository } from '@db/models/user/user.repository';
 import { ConfigEntitiesRepository } from '@db/models/config/config.repository';
 import { ConfigEntities } from '@db/entity/configs.entity';
 import { ConfigServices } from '@db/models/config/config.service';
-import { StakedContractEntities } from '@db/entity/staked_contract.entity';
-import { PaymentDetailsEntities } from '@db/entity/payment_details';
+import { ProfileEntities } from '@db/entity/profile.entity';
 
-export const entities = [
-  UserEntities,
-  StakedContractEntities,
-  ConfigEntities,
-  PaymentDetailsEntities,
-];
+export const entities = [UserEntities, ConfigEntities, ProfileEntities];
 @Module({
   imports: [
     UserEntitiesRepository,

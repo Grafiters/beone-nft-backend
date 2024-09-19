@@ -1,59 +1,41 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class PaymentDetails1725586958491 implements MigrationInterface {
+export class NftActivities1726731347682 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'payment_details',
+        name: 'nft_activities',
         columns: [
           {
             name: 'id',
             type: 'int',
+            isUnique: true,
             isPrimary: true,
             isGenerated: true,
             generationStrategy: 'increment',
           },
           {
-            name: 'hash',
+            name: 'uid',
             type: 'varchar',
-            isNullable: false,
             isUnique: true,
-          },
-          {
-            name: 'contract_address',
-            type: 'varchar',
             isNullable: false,
           },
           {
-            name: 'from',
-            type: 'varchar',
+            name: 'nft_token_id',
+            type: 'int',
             isNullable: false,
           },
           {
-            name: 'to',
+            name: 'referance_type',
             type: 'varchar',
+            isUnique: false,
             isNullable: false,
           },
           {
-            name: 'amount',
-            type: 'decimal',
-            precision: 18,
-            scale: 8,
+            name: 'reference_id',
+            type: 'int',
+            isUnique: false,
             isNullable: false,
-          },
-          {
-            name: 'status',
-            type: 'varchar',
-          },
-          {
-            name: 'payment_pending_at',
-            type: 'timestamp',
-            default: 'now()',
-          },
-          {
-            name: 'payment_success_at',
-            type: 'timestamp',
-            isNullable: true,
           },
           {
             name: 'created_at',
@@ -64,6 +46,7 @@ export class PaymentDetails1725586958491 implements MigrationInterface {
             name: 'updated_at',
             type: 'timestamp',
             default: 'now()',
+            onUpdate: 'now()',
           },
         ],
       }),
@@ -71,6 +54,6 @@ export class PaymentDetails1725586958491 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('payment_details');
+    await queryRunner.dropTable('nft_activities');
   }
 }
