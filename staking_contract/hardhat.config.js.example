@@ -1,0 +1,52 @@
+require('@nomiclabs/hardhat-waffle');
+require('@nomicfoundation/hardhat-verify');
+
+module.exports = {
+  solidity: {
+    compilers: [{ version: '0.8.17' }],
+  },
+  sourcify: {
+    enabled: false,
+  },
+  networks: {
+    dev: {
+      url: 'https://rpctest.spectachain.io',
+      chainId: 1503,
+      gasPrice: 300000000,
+      accounts: [''],
+    },
+    mainnet: {
+      url: 'https://rpc.spectachain.io/',
+      chainId: 575757,
+      gasPrice: 30000000000,
+      accounts: [''],
+    },
+    bsc_testnet: {
+      url: 'https://bsc-testnet-rpc.publicnode.com',
+      chainId: 97,
+      gasPrice: 3000000000,
+      accounts: [''],
+    },
+  },
+  etherscan: {
+    // API Key dari BscScan, tetap gunakan etherscan plugin karena BscScan mendukung etherscan format
+    apiKey: {
+      bscTestnet: '',
+    },
+    disableSourcify: true, // Menonaktifkan Sourcify secara global
+
+    // Jika ingin menggunakan endpoint BscScan Testnet secara spesifik
+    url: 'https://api-testnet.bscscan.com/api', // URL API untuk BSC Testnet
+    customChains: [
+      {
+        apiKey: '',
+        network: 'bscTestnet',
+        chainId: '97',
+        urls: {
+          apiURL: 'https://api-testnet.bscscan.com/api', // URL API untuk BSC Testnet
+          browserURL: 'https://testnet.bscscan.com', // URL explorer untuk melihat transaksi
+        },
+      },
+    ],
+  },
+};

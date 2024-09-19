@@ -4,11 +4,17 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserEntities } from '@db/entity/users.entity';
 import { UserService } from '@db/models/user/user.service';
 import { UserEntitiesRepository } from '@db/models/user/user.repository';
+import { ConfigEntitiesRepository } from '@db/models/config/config.repository';
+import { ConfigEntities } from '@db/entity/configs.entity';
+import { ConfigServices } from '@db/models/config/config.service';
+import { ProfileEntities } from '@db/entity/profile.entity';
 
+export const entities = [UserEntities, ConfigEntities, ProfileEntities];
 @Module({
   imports: [
     UserEntitiesRepository,
-    TypeOrmModule.forFeature([UserEntities]),
+    ConfigEntitiesRepository,
+    TypeOrmModule.forFeature(entities),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -18,13 +24,13 @@ import { UserEntitiesRepository } from '@db/models/user/user.repository';
         username: configService.get('database').username,
         password: configService.get('database').password,
         database: configService.get('database').database,
-        entities: configService.get('database').entities,
+        entities: entities,
         synchronize: true,
       }),
       inject: [ConfigService],
     }),
   ],
-  providers: [UserService],
-  exports: [UserService],
+  providers: [UserService, ConfigServices],
+  exports: [UserService, ConfigServices],
 })
 export class DatabaseModule {}

@@ -14,7 +14,12 @@ export class AuthService {
     message: string,
     signature: string,
   ): Promise<boolean> {
-    const recoveredAddress = ethers.verifyMessage(message, signature);
-    return recoveredAddress.toLowerCase() === address.toLowerCase();
+    try {
+      const recoveredAddress = ethers.verifyMessage(message, signature);
+      return recoveredAddress.toLowerCase() === address.toLowerCase();
+    } catch (error) {
+      this.logger.debug(`Error verify message => ${error}`);
+      return error;
+    }
   }
 }

@@ -45,29 +45,18 @@ $ pnpm run start:dev
 $ pnpm run start:prod
 ```
 
-## Test
-
+## Production
+build this project using docker just run
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+$ docker build -t staked-backend:0.0.1 <path-project-location>
 ```
 
-## Support
+run create database
+```bash
+$ docker-compose run --rm contract-services sh -c "node script/db.mjs"
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+run the project using docker-compose { no need to worry about migration migration will automacly after project running }
+```bash
+$ docker-compose up -Vd contract-services
+```

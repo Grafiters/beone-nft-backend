@@ -1,64 +1,65 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class StackedContract1725345831352 implements MigrationInterface {
+export class Profiles1726731766103 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'stacked_contracts',
+        name: 'profiles',
         columns: [
           {
             name: 'id',
             type: 'int',
+            isUnique: true,
             isPrimary: true,
             isGenerated: true,
             generationStrategy: 'increment',
           },
           {
-            name: 'contract_address',
-            type: 'varchar',
-            isUnique: true,
+            name: 'user_id',
+            type: 'int',
             isNullable: false,
           },
           {
-            name: 'name',
+            name: 'username',
             type: 'varchar',
+            isUnique: false,
             isNullable: true,
           },
           {
-            name: 'symbol',
-            type: 'varchar',
+            name: 'image',
+            type: 'text',
+            isUnique: false,
             isNullable: true,
           },
           {
-            name: 'staked_token',
-            type: 'varchar',
+            name: 'banner',
+            type: 'text',
+            isUnique: false,
             isNullable: true,
           },
           {
-            name: 'reward_token',
-            type: 'varchar',
+            name: 'bio',
+            type: 'longtext',
+            isUnique: false,
             isNullable: true,
           },
           {
-            name: 'reward_per_block',
+            name: 'discord',
             type: 'varchar',
+            isUnique: false,
             isNullable: true,
-            default: '0',
           },
           {
-            name: 'start_block',
-            type: 'int',
-            default: 0,
+            name: 'sosmed_x',
+            type: 'varchar',
+            isUnique: false,
+            isNullable: true,
           },
           {
-            name: 'bonus_end_block',
-            type: 'int',
-            default: 0,
-          },
-          {
-            name: 'status',
-            type: 'int',
-            default: 0,
+            name: 'instagram',
+            type: 'varchar',
+            isUnique: false,
+            isNullable: true,
           },
           {
             name: 'created_at',
@@ -69,6 +70,7 @@ export class StackedContract1725345831352 implements MigrationInterface {
             name: 'updated_at',
             type: 'timestamp',
             default: 'now()',
+            onUpdate: 'now()',
           },
         ],
       }),
@@ -76,6 +78,6 @@ export class StackedContract1725345831352 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('stacked_contract');
+    await queryRunner.dropTable('profiles');
   }
 }

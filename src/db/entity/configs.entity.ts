@@ -6,22 +6,22 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity()
-export class UserEntities {
+@Entity('configs')
+export class ConfigEntities {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ name: 'name', unique: true, nullable: false })
   name: string;
 
-  @Column()
+  @Column({ name: 'value', unique: true, nullable: false })
   value: string;
 
-  @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
 
   @UpdateDateColumn({
-    type: 'timestamptz',
+    type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
     onUpdate: 'CURRENT_TIMESTAMP',
   })

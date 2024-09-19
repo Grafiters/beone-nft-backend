@@ -8,6 +8,7 @@ import {
 } from '@nestjs/platform-fastify';
 import { SwaggerConfigModule } from '@swagger/swagger.module';
 import fastifyCookie from '@fastify/cookie';
+import fastifyCors from '@fastify/cors'; // Import Fastify CORS
 
 async function bootstrap() {
   const fastifyAdapter = new FastifyAdapter({
@@ -29,6 +30,12 @@ async function bootstrap() {
 
   app.register(fastifyCookie, {
     secret: jwtPrivateKey,
+  });
+
+  app.register(fastifyCors, {
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: false,
   });
 
   SwaggerConfigModule.setupSwagger(app);
