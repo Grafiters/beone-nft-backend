@@ -1,13 +1,8 @@
 import { StakedContractEntities } from '@db/entity/staked_contract.entity';
 import { ApiProperty } from '@nestjs/swagger';
-import { TokenStakedResponse } from './token-staked-response.dto';
 
 export class StakedResponse {
-  static async fromStaked(
-    stak: StakedContractEntities,
-    reward: TokenStakedResponse | null,
-    staked: TokenStakedResponse | null,
-  ) {
+  static async fromStaked(stak: StakedContractEntities) {
     const dto = new StakedResponse();
     dto.contract_address = stak.contract_address;
     dto.name = stak.name;
@@ -19,8 +14,6 @@ export class StakedResponse {
     dto.start_block = stak.start_block;
     dto.bonus_end_block = stak.bonus_end_block;
     dto.status = stak.status;
-    dto.staked_token_detail = staked;
-    dto.reward_token_detail = reward;
 
     return dto;
   }
@@ -54,10 +47,4 @@ export class StakedResponse {
 
   @ApiProperty({ type: String })
   status: string;
-
-  @ApiProperty({ type: TokenStakedResponse })
-  staked_token_detail: TokenStakedResponse;
-
-  @ApiProperty({ type: TokenStakedResponse })
-  reward_token_detail: TokenStakedResponse;
 }

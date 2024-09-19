@@ -24,14 +24,12 @@ import {
   PaymentStatus,
   StakedContractInitialize,
   StakedStatus,
-  TokenStaked,
 } from '@params/function/staked-contract';
 import { PaymentRequest } from '@params/request/payment-stack-request.dto';
 import { StakedRequest } from '@params/request/staked-data-request.dto';
 import { ContractCreateResponse } from '@params/response/contract-create-response.dto';
 import { GeneralResponse } from '@params/response/general-response.dto';
 import { StakedResponse } from '@params/response/staked-response.dto';
-import { TokenStakedResponse } from '@params/response/token-staked-response.dto';
 import { AuthGuard } from '@services/auth/auth.guard';
 import { BlockchainService } from '@services/blockchain/blockchain.service';
 import { ContractsService } from '@services/contracts/contracts.service';
@@ -61,29 +59,7 @@ export class ContractController {
 
     const stakeDto = await Promise.all(
       stake.map(async (st) => {
-        let staked_token_detail: TokenStaked | null = null;
-        if (st?.staked_token) {
-          staked_token_detail = await this.blockchainService.getTokenDetail(
-            st.staked_token,
-          );
-        }
-
-        let reward_token_detail: TokenStaked | null = null;
-        if (st?.reward_token) {
-          reward_token_detail = await this.blockchainService.getTokenDetail(
-            st.reward_token,
-          );
-        }
-
-        const stakedResponse = await StakedResponse.fromStaked(
-          st,
-          staked_token_detail
-            ? await TokenStakedResponse.fromStaked(staked_token_detail)
-            : null,
-          reward_token_detail
-            ? await TokenStakedResponse.fromStaked(reward_token_detail)
-            : null,
-        );
+        const stakedResponse = await StakedResponse.fromStaked(st);
 
         return stakedResponse;
       }),
@@ -109,29 +85,7 @@ export class ContractController {
 
     const stakeDto = await Promise.all(
       stake.map(async (st) => {
-        let staked_token_detail: TokenStaked | null = null;
-        if (st?.staked_token) {
-          staked_token_detail = await this.blockchainService.getTokenDetail(
-            st.staked_token,
-          );
-        }
-
-        let reward_token_detail: TokenStaked | null = null;
-        if (st?.reward_token) {
-          reward_token_detail = await this.blockchainService.getTokenDetail(
-            st.reward_token,
-          );
-        }
-
-        const stakedResponse = await StakedResponse.fromStaked(
-          st,
-          staked_token_detail
-            ? await TokenStakedResponse.fromStaked(staked_token_detail)
-            : null,
-          reward_token_detail
-            ? await TokenStakedResponse.fromStaked(reward_token_detail)
-            : null,
-        );
+        const stakedResponse = await StakedResponse.fromStaked(st);
 
         return stakedResponse;
       }),
@@ -439,7 +393,7 @@ export class ContractController {
           queryRunner.manager,
         );
         if (create) {
-          const dto = await StakedResponse.fromStaked(create, null, null);
+          const dto = await StakedResponse.fromStaked(create);
           const removeBigInt = JSON.parse(
             JSON.stringify(dto, (key, value) =>
               typeof value === 'bigint' ? value.toString() : value,
