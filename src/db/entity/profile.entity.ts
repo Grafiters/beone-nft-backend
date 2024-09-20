@@ -19,7 +19,7 @@ export class ProfileEntities {
 
   @OneToOne(() => UserEntities, (user) => user.profiles)
   @JoinColumn({ name: 'user_id' })
-  users: UserEntities;
+  users: Promise<UserEntities>;
 
   @Column()
   username: string;
@@ -30,7 +30,7 @@ export class ProfileEntities {
   @Column({ type: 'text', nullable: true })
   banner: string;
 
-  @Column({ type: 'longtext', nullable: true })
+  @Column({ type: 'text', nullable: true })
   bio: string;
 
   @Column({ type: 'varchar', nullable: true })

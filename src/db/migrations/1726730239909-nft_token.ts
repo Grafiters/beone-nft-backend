@@ -21,6 +21,11 @@ export class NftToken1726730239909 implements MigrationInterface {
             isNullable: false,
           },
           {
+            name: 'user_id',
+            type: 'int',
+            isNullable: false,
+          },
+          {
             name: 'collection_id',
             type: 'int',
             isNullable: false,

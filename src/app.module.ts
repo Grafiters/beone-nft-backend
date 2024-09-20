@@ -23,8 +23,16 @@ import { ConfigServices } from './db/models/config/config.service';
 import { BlockchainService } from './services/blockchain/blockchain.service';
 import { ContractsService } from './services/contracts/contracts.service';
 import { ProfileEntities } from '@db/entity/profile.entity';
+import { CollectionEntities } from '@db/entity/collection.entity';
+import { NftTokenEntities } from '@db/entity/nft_token.entity';
 
-export const entities = [UserEntities, ConfigEntities, ProfileEntities];
+export const entities = [
+  UserEntities,
+  ConfigEntities,
+  ProfileEntities,
+  CollectionEntities,
+  NftTokenEntities,
+];
 @Module({
   imports: [
     DatabaseModule,

@@ -8,8 +8,16 @@ import { ConfigEntitiesRepository } from '@db/models/config/config.repository';
 import { ConfigEntities } from '@db/entity/configs.entity';
 import { ConfigServices } from '@db/models/config/config.service';
 import { ProfileEntities } from '@db/entity/profile.entity';
+import { CollectionEntities } from '@db/entity/collection.entity';
+import { NftTokenEntities } from '@db/entity/nft_token.entity';
 
-export const entities = [UserEntities, ConfigEntities, ProfileEntities];
+export const entities = [
+  ConfigEntities,
+  UserEntities,
+  ProfileEntities,
+  CollectionEntities,
+  NftTokenEntities,
+];
 @Module({
   imports: [
     UserEntitiesRepository,

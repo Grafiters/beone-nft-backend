@@ -7,8 +7,10 @@ import {
   UpdateDateColumn,
   JoinColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { CollectionType } from './enum/collection';
+import { NftTokenEntities } from './nft_token.entity';
 
 @Entity('collections')
 export class CollectionEntities {
@@ -20,12 +22,12 @@ export class CollectionEntities {
 
   @ManyToOne(() => UserEntities, (user) => user.collections)
   @JoinColumn({ name: 'user_id' })
-  users: UserEntities;
+  users: Promise<UserEntities>;
 
   @Column({ type: 'varchar', nullable: false, unique: true })
   uid: string;
 
-  @Column({ type: 'varchar', nullable: true, unique: true })
+  @Column({ type: 'varchar', nullable: true, unique: false })
   hash: string;
 
   @Column({ type: 'varchar', nullable: false, unique: false })
@@ -36,6 +38,9 @@ export class CollectionEntities {
 
   @Column({ type: 'varchar', nullable: false, unique: false })
   logo_url: string;
+
+  @OneToMany(() => NftTokenEntities, (collections) => collections.collections)
+  nft_tokens: Promise<NftTokenEntities[]>;
 
   @Column({
     type: 'enum',
